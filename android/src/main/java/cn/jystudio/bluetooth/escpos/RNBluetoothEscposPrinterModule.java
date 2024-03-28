@@ -316,7 +316,7 @@ public class RNBluetoothEscposPrinterModule extends ReactContextBaseJavaModule
     }
 
     @ReactMethod
-    public void printPic(String base64encodeStr, @Nullable  ReadableMap options) {
+    public void printPic(String base64encodeStr, @Nullable  ReadableMap options, Boolean cutPaper) {
         int width = 0;
         int leftPadding = 0;
         if(options!=null){
@@ -341,12 +341,14 @@ public class RNBluetoothEscposPrinterModule extends ReactContextBaseJavaModule
              * Returns: byte[]
              */
             byte[] data = PrintPicture.POS_PrintBMP(mBitmap, width, nMode, leftPadding);
-            //  SendDataByte(buffer);
+            //	SendDataByte(buffer);
             sendDataByte(Command.ESC_Init);
             sendDataByte(Command.LF);
             sendDataByte(data);
             sendDataByte(PrinterCommand.POS_Set_PrtAndFeedPaper(30));
-            sendDataByte(PrinterCommand.POS_Set_Cut(1));
+            if (cutPaper) {
+                sendDataByte(PrinterCommand.POS_Set_Cut(1));
+            }
             sendDataByte(PrinterCommand.POS_Set_PrtInit());
         }
     }
