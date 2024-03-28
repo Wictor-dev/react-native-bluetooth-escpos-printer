@@ -353,6 +353,11 @@ public class RNBluetoothEscposPrinterModule extends ReactContextBaseJavaModule
         }
     }
 
+    @ReactMethod
+    public void cutPaper() {
+        sendDataByte(PrinterCommand.POS_Set_Cut(1));
+    }
+
 
     @ReactMethod
     public void selfTest(@Nullable Callback cb) {
@@ -385,7 +390,7 @@ public class RNBluetoothEscposPrinterModule extends ReactContextBaseJavaModule
     }
 
     @ReactMethod
-    public void printQRCode(String content, int size, int correctionLevel, final Promise promise, Boolean cutPaper) {
+    public void printQRCode(String content, int size, int correctionLevel, final Promise promise) {
         try {
             Log.i(TAG, "生成的文本：" + content);
             // 把输入的文本转为二维码
@@ -421,9 +426,6 @@ public class RNBluetoothEscposPrinterModule extends ReactContextBaseJavaModule
             byte[] data = PrintPicture.POS_PrintBMP(bitmap, size, 0, 0);
             
             if (sendDataByte(data)) {
-                if (cutPaper) {
-                    sendDataByte(PrinterCommand.POS_Set_Cut(1));
-                }
                 promise.resolve(null);
             } else {
                 promise.reject("COMMAND_NOT_SEND");
