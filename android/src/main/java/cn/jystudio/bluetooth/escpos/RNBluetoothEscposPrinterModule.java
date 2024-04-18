@@ -389,8 +389,8 @@ public class RNBluetoothEscposPrinterModule extends ReactContextBaseJavaModule
         }
     }
 
-     @ReactMethod
-    public void printQRCode(String content, int size, int correctionLevel, int leftPadding, final Promise promise) {
+    @ReactMethod
+    public void printQRCode(String content, int size, int correctionLevel, final Promise promise) {
         try {
             Log.i(TAG, "Generated content: " + content);
 
@@ -413,7 +413,7 @@ public class RNBluetoothEscposPrinterModule extends ReactContextBaseJavaModule
             Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
             bitmap.setPixels(pixels, 0, width, 0, 0, width, height);
 
-            byte[] data = PrintPicture.POS_PrintBMP(bitmap, size, 0, leftPadding); // Adjusted for left padding
+            byte[] data = PrintPicture.POS_PrintBMP(bitmap, size, 0, 130); // Adjusted for left padding
 
             if (sendDataByte(data)) {
                 promise.resolve(null);
